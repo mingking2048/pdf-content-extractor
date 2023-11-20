@@ -242,8 +242,8 @@ def image_analysis(paper_path, prompt=None, variant=None):
 def main():
     args = parse_args()
     
-    paper_dir = Path('Genomics Papers')
-    paper_path = paper_dir / 'Rare and de novo variants in 827 congenital  diaphragmatic hernia probands implicate  LONP1 as candidate risk gene.pdf'
+    paper_dir = Path('pdf')
+    paper_path = paper_dir / 'starGAN.pdf'
     args.paper_path = paper_path
 
     extractor = PDFImageExtractor(args.paper_path)
