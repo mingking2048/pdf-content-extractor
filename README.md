@@ -73,4 +73,8 @@ Specify the licensing details here.
 
 Provide guidelines for those who wish to contribute to the project.
 
+## Acknowledgement
+
+- [LLaVA](https://github.com/haotian-liu/LLaVA/tree/main): the codebase we built upon. 
+
 ---
