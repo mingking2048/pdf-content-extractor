@@ -11,6 +11,7 @@ Before using the PDF Content Extractor, ensure the following prerequisites are m
 1. **Python Version**: Requires Python 3.8 or higher.
 2. **Libraries**: Dependencies include pdfplumber, torch, PIL, and other dependencies listed in `requirements.txt`.
 3. **Environment**: A Conda environment is recommended for managing dependencies.
+4. **GPU Vram**: Requires at least two 12GB GPUs or a single 24GB GPU.
 
 ## Installation
 
