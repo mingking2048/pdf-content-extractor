@@ -39,7 +39,14 @@ Ensure the following prerequisites are met before using this tool:
    ```
 3. To extract textual data and tables, run the `pdf_ext.py` script:
    ```bash
-   python pdf_ext.py --input_file <path-to-pdf> --output_file <path-to-output> --prompt <vision-language-prompt> --keyword <keyword> --convert_table <True/False> --convert_figure <True/False>
+   python pdf_ext.py \
+   --input_file <path-to-pdf> \
+   --output_file <path-to-output> \
+   --prompt <vision-language-prompt> \
+   --keyword <keyword> \
+   --convert_table --convert_figure
+   
+   # Note: keyword will be ignored when prompt is used
    ```
 
 ### Advanced Usage
@@ -58,12 +65,12 @@ Ensure the following prerequisites are met before using this tool:
 
 For image analysis:
 ```bash
-python pdf_image_analysis.py --input_path "pdf/starGAN.pdf" --prompt "Please analyze the image in detail"
+python pdf_image_analysis.py --input_path "pdf/starGAN.pdf" --keyword "GAN"
 ```
 
 For text and table extraction:
 ```bash
-python pdf_ext.py --input_path "pdf/starGAN.pdf" --output_path "output.txt" --prompt "Please analyze the image in detail" --keyword "GAN" --convert_table --convert_figure
+python pdf_ext.py --input_path "pdf/starGAN.pdf" --output_path "output.txt" --keyword "GAN" --convert_table --convert_figure
 ```
 
 ## Dependencies
