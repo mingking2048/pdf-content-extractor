@@ -1,6 +1,3 @@
-Here's an updated version of your `readme.md` file that includes the new `pdf_ext.py` program:
-
-```markdown
 # README for LLaVA PDF Image Analysis and Response Generation Tool
 
 ## Overview
