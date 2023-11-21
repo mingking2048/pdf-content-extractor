@@ -52,7 +52,7 @@ Ensure the following prerequisites are met before using this tool:
 ### Advanced Usage
 
 - Customize prompts to guide the response generation for extracted images and textual content.
-- Choose different LLaVA models for varied response styles and complexities.
+- Choose different configs for LLaVA models for varied response styles and complexities.
 
 ## Features
 
