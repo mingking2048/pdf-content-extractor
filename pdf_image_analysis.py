@@ -210,32 +210,33 @@ class LLaVAResponseGenerator:
         return outputs
 
    
-def parse_args():
-    parser = argparse.ArgumentParser(description="LLaVA PDF Image Analysis and Response Generation")
+def parse_args(parser=None):
+    if parser is None: 
+        parser = argparse.ArgumentParser(description="LLaVA PDF Image Analysis and Response Generation")
+        parser.add_argument("--input_path", type=str, help="Path to the PDF paper")
     parser.add_argument("--model_path", type=str, default="liuhaotian/llava-v1.5-7b", choices=["liuhaotian/llava-v1.5-7b", "liuhaotian/llava-v1.5-13b"], help="Model path for LLaVA")
     parser.add_argument("--temperature", type=float, default=1, help="Temperature for response generation")
-    parser.add_argument("--top_p", type=float, default=1, help="Top P for response generation")
+    parser.add_argument("--top_p", type=float, default=0.8, help="Top P for response generation")
     parser.add_argument("--max_new_tokens", type=int, default=1024, help="Maximum new tokens to generate")
     parser.add_argument("--num_beams", type=int, default=5, help="Number of beams for beam search")
-    parser.add_argument("--paper_path", type=str, help="Path to the PDF paper")
-    parser.add_argument("--prompt", type=str, default="Please describe the image", help="Prompt for image description")
+    parser.add_argument("--prompt", type=str, default="Please analyze the image in detail", help="Prompt for image description. If this is given, keyword will be ignored")
+    parser.add_argument('--keyword', default=None, type=str, help='keyword for input prompt')
 
     return parser.parse_args()
 
-def image_analysis(paper_path, prompt=None, variant=None):
-    args = parse_args()
-    if prompt is None:
-        if variant is None:
-            prompt = "Please describe the image"
+def image_analysis(args):
+    if args.prompt is None:
+        if args.keyword is None:
+            args.prompt = "Please analyze the image in detail"
         else:
-            prompt = f"Is there any evidence related to {variant} on this chart?"
-    extractor = PDFImageExtractor(paper_path)
+            args.prompt = f"Analyze the figure provided and detail its primary focus and findings. If the figure includes information regarding the {args.keyword} or its alias name, elaborate on the specifics of this data, its significance, and any comparative results illustrated. If the {args.keyword} or its alias not be featured in the figure, proceed to offer a thorough analysis of the depicted data, its statistical relevance, and the overall conclusions that can be drawn from the experimental results. Emphasize any key points or annotations that help interpret the figure’s content."
+    extractor = PDFImageExtractor(args.input_path)
     images_captions = extractor.extract_images_with_captions()
 
     generator = LLaVAResponseGenerator(args.temperature, args.top_p, args.max_new_tokens, args.num_beams, args.model_path)
     figure_descriptions = {}
     for fig_num, img_path in images_captions.items():
-        response = generator.generate_response(prompt, img_path)
+        response = generator.generate_response(args.prompt, img_path)
         figure_descriptions[fig_num] = response
     return figure_descriptions
 
@@ -243,15 +244,11 @@ def main():
     args = parse_args()
     
     paper_dir = Path('pdf')
-    paper_path = paper_dir / 'starGAN.pdf'
-    args.paper_path = paper_path
+    input_path = paper_dir / 'starGAN.pdf'
+    args.input_path = input_path
 
-    extractor = PDFImageExtractor(args.paper_path)
-    images_captions = extractor.extract_images_with_captions()
-
-    generator = LLaVAResponseGenerator(args.temperature, args.top_p, args.max_new_tokens, args.num_beams, args.model_path)
-    for fig_num, img_path in images_captions.items():
-        response = generator.generate_response(args.prompt, img_path)
+    figure_descriptions = image_analysis(args)
+    for fig_num, response in figure_descriptions.items():
         print(f"Figure {fig_num}: {response}")
 
 if __name__ == "__main__":
@@ -262,6 +259,5 @@ if __name__ == "__main__":
 # conda activate llava
 # pip install --upgrade pip  # enable PEP 660 support
 # pip install -e . 
-# pip install -r requirements.txt    
 # script:
 # python pdf_image_analysis.py --paper_path ${paper_path} --prompt ${prompt}
