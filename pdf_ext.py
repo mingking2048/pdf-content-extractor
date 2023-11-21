@@ -1,6 +1,7 @@
 import pdfplumber
 import re
 from pdf_image_analysis import image_analysis
+import argparse
 
 def find_table_titles(page):
     titles = []
@@ -72,8 +73,23 @@ def extract_text_and_tables(pdf_path, convert_table=True, convert_fig=True, prom
 
 
 
-if __name__ == "__main__":
-    pdf_path = './Genomics Papers/Activity-associated effect of LDL receptor missense variants located in  the cysteine-rich repeats.pdf' # 的PDF文件路径
-    text = extract_text_and_tables(pdf_path)
+def main():
+    parser = argparse.ArgumentParser(description='Extract text and tables from a PDF file.')
+    parser.add_argument('input_file', type=str, help='Path to the input PDF file')
+    parser.add_argument('output_file', type=str, help='Path to the output text file')
+    parser.add_argument('prompt', default=None, type=str, help='vision language prompt')
+    parser.add_argument('variant', default=None, type=str, help='variant')
+    parser.add_argument('convert_table', type=bool, help='convert the image into a formatted document?')
+    parser.add_argument('convert_figure', type=bool, help='convert an image into text?')
+    args = parser.parse_args()
 
-    print(text)
+    text = extract_text_and_tables(args.input_file, convert_table=args.convert_table, convert_fig=args.convert_figure, prompt=args.prompt, variant=args.variant)
+    
+    with open(args.output_file, 'w') as f:
+        for item in text:
+            print(item, file=f)
+
+
+
+if __name__ == "__main__":
+    main()
