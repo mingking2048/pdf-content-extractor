@@ -1,28 +1,31 @@
-# README for LLaVA PDF Image Analysis and Response Generation Tool
+# README for PDF Content Extractor
 
 ## Overview
 
-LLaVA (Language Llama Variational Autoencoder) is a powerful tool designed to extract images and textual data such as tables and figures from PDF files, particularly from academic papers. It generates descriptive responses using advanced language and visual processing models. The tool can analyze images and text in scientific papers, identify and extract them along with their captions or nearby text, and use a pre-trained LLaVA model to generate responses based on custom prompts.
+The PDF Content Extractor is designed to efficiently extract text, tables, and figures from PDF files. It leverages `pdfplumber` for text and table extraction and integrates with an image analysis module for processing figures. This tool is particularly useful for academic and research purposes where quick extraction of content from PDF documents is required.
 
 ## Prerequisites
 
-Ensure the following prerequisites are met before using this tool:
+Before using the PDF Content Extractor, ensure the following prerequisites are met:
 
-1. **Python Version**: Python 3.8 or higher.
-2. **Libraries**: PyMuPDF, pdfplumber, torch, PIL, and other dependencies listed in `pyproject.toml`.
-3. **Conda Environment**: Recommended for managing dependencies.
+1. **Python Version**: Requires Python 3.8 or higher.
+2. **Libraries**: Dependencies include pdfplumber, torch, PIL, and other dependencies listed in `requirements.txt`.
+3. **Environment**: A Conda environment is recommended for managing dependencies.
 
 ## Installation
 
-1. Create a Conda environment:
+Follow these steps to install the tool:
+
+1. **Create a Conda Environment**:
    ```bash
-   conda create -n llava python=3.8 -y
-   conda activate llava
+   conda create -n pdf_extractor python=3.8 -y
+   conda activate pdf_extractor
    ```
 
-2. Clone the repository and navigate to the project directory.
+2. **Clone the Repository**:
+   - Clone the repository from GitHub and navigate to the project directory.
 
-3. Install the project in editable mode and its dependencies:
+3. **Install Dependencies**:
    ```bash
    pip install --upgrade pip
    pip install -e .
@@ -32,22 +35,26 @@ Ensure the following prerequisites are met before using this tool:
 
 ### Basic Usage
 
-1. Place your PDF files in a designated directory.
-2. To extract images, run the script with the necessary arguments:
+1. **Prepare Your PDFs**:
+   - Place the PDF files you want to analyze in a designated directory.
+
+2. To analyze images, run the script with the necessary arguments:
    ```bash
-   python pdf_image_analysis.py --paper_path <path-to-pdf> --prompt <custom-prompt>
+   python pdf_image_analysis.py --input_path <path-to-pdf> --prompt <custom-prompt> --keyword <keyword>
    ```
-3. To extract textual data and tables, run the `pdf_ext.py` script:
-   ```bash
-   python pdf_ext.py \
-   --input_file <path-to-pdf> \
-   --output_file <path-to-output> \
-   --prompt <vision-language-prompt> \
-   --keyword <keyword> \
-   --convert_table --convert_figure
    
-   # Note: keyword will be ignored when prompt is used
-   ```
+3. To analyze textual data, figures and tables, run the `pdf_ext.py` script:
+   - Use the following command to run the script:
+	```bash
+		python pdf_ext.py \
+		--input_path <path-to-pdf> \
+		--output_path <path-to-output> \
+		--prompt <custom-prompt> \
+		--keyword <keyword> \
+		--convert_table --convert_figure
+    ```
+   - The `--convert_table` flag is used to extract tables, and `--convert_figure` is for figure analysis.
+   - Note: keyword will be ignored when prompt is used
 
 ### Advanced Usage
 
@@ -56,10 +63,10 @@ Ensure the following prerequisites are met before using this tool:
 
 ## Features
 
-- **Image and Text Extraction**: Extracts images, tables, and figures from PDFs, with a focus on academic papers.
-- **Figure and Table Number Assignment**: Assigns unique numbers to each extracted image, table, and figure for reference.
-- **Response Generation**: Uses the LLaVA model to generate descriptive responses for images and textual content.
-- **Custom Prompts**: Supports customized prompts for specific image and text descriptions.
+- **Text Extraction**: Extracts plain text from PDF documents.
+- **Table Extraction**: Efficiently identifies and extracts tables.
+- **Figure Analysis**: Integrates with an image analysis module to analyze figures within the document.
+- **Custom Output**: Outputs extracted content to a specified file.
 
 ## Example
 
@@ -68,31 +75,25 @@ For image analysis:
 python pdf_image_analysis.py --input_path "pdf/starGAN.pdf" --keyword "GAN"
 ```
 
-For text and table extraction:
+For pdf text extraction:
 ```bash
 python pdf_ext.py --input_path "pdf/starGAN.pdf" --output_path "output.txt" --keyword "GAN" --convert_table --convert_figure
 ```
 
 ## Dependencies
 
-In addition to the core dependencies, the tool also requires:
+The tool requires:
 
-- **PyMuPDF**: For PDF processing and image extraction.
-- **pdfplumber**: To extract text and tables surrounding images in PDFs for context.
-
-These dependencies are included in the `pyproject.toml` file and will be installed during the project setup.
-
-## License
-
-Specify the licensing details here.
+- **pdfplumber**: For extracting text and tables from PDFs.
+- **Image Analysis Module**: For analyzing figures (additional setup may be required).
 
 ## Contributing
 
-Provide guidelines for those who wish to contribute to the project.
+Interested in contributing? [Provide guidelines for contributions, including how to submit pull requests, coding standards, and issue reporting guidelines.]
 
-## Acknowledgement
+## Acknowledgements
 
+- [PDFPlumber](https://github.com/jsvine/pdfplumber): The primary library used for PDF text and table extraction.
 - [LLaVA](https://github.com/haotian-liu/LLaVA/tree/main): the codebase we built upon.
-- [pdf_ext.py](https://github.com/mingking2048/pdf-content-extractor): Our new tool for text and table extraction from PDFs.
 
 ---
